@@ -14,10 +14,7 @@ public class Game {
 
 
     public Player[] getPlayers() {
-        Player[] players = new Player[2];
-        players[0] = this.player1;
-        players[1] = this.player2;
-        return players;
+        return this.players;
     }
 
     public Field getField() {
