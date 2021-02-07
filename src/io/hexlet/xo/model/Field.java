@@ -11,9 +11,14 @@ public class Field {
 
     private static final int MIN_COORDINATE = 0;
 
-    private static final int MAX_COORDINATE = MAX_SIZE;
+    private final int fieldSize;
 
-    private  final Figure[][] field = new Figure[MAX_SIZE][MAX_SIZE];
+    private final Figure[][] field;
+
+    public Field(final int fieldSize) {
+        this.fieldSize = fieldSize;
+        this.field = new Figure[fieldSize][fieldSize];
+    }
 
     public int getSize() {
         return MAX_SIZE;
@@ -32,11 +37,11 @@ public class Field {
     }
 
     private boolean checkPoint (final Point point) {
-        return checkCoordinate(point.x) && checkCoordinate(point.y);
+        return checkCoordinate(point.x, field.length) && checkCoordinate(point.y, field.length);
     }
 
-    private boolean checkCoordinate(final int coordinate) {
-        return coordinate >= MIN_COORDINATE && coordinate < MAX_COORDINATE;
+    private boolean checkCoordinate(final int coordinate, final int maxCoordinate) {
+        return coordinate >= MIN_COORDINATE && coordinate < maxCoordinate;
     }
 
 }
