@@ -69,7 +69,7 @@ public class WinnerControllerTest {
         final Field field = new Field(3);
 
         for (int i = 0; i < 3; i++) {
-            field.setFigure(new Point(i,i), Figure.X);  //field.getSize()-1-i
+            field.setFigure(new Point(i,i), Figure.X);
         }
 
         assertEquals(Figure.X,winnerController.getWinner(field));
@@ -98,7 +98,7 @@ public class WinnerControllerTest {
         final Field field = new Field(3);
 
         for (int i = 0; i < 3; i++) {
-            field.setFigure(new Point(i,field.getSize()-1-i), Figure.X);  //field.getSize()-1-i
+            field.setFigure(new Point(i,field.getSize()-1-i), Figure.X);
         }
 
         assertEquals(Figure.X,winnerController.getWinner(field));
