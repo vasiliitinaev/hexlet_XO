@@ -13,12 +13,14 @@ public class CurrentMoveController {
 
         int countX = 0;
         int countY = 0;
+        int count = 0;
 
         for (int i = 0; i < field.getSize(); i++) {
             for (int j = 0; j < field.getSize(); j++) {
+                count++;
                 Point point = new Point(i, j);
                 if (field.getFigure(point) == Figure.X) {
-                    countX++;
+                    countX++;                    
                 } else {
                     if (field.getFigure(point) == Figure.O) {
                         countY++;
@@ -27,6 +29,10 @@ public class CurrentMoveController {
             }
         }
 
+        if (count == field.getSize()*field.getSize()) {
+            return null;
+        }
+        
         if (countX <= countY) {
             result = Figure.X;
         } else {
