@@ -4,12 +4,13 @@ import io.hexlet.xo.model.Field;
 import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Game;
 import io.hexlet.xo.model.Player;
+import io.hexlet.xo.model.exceptions.AlreadyOccupiedException;
 import io.hexlet.xo.model.exceptions.InvalidPointException;
 import io.hexlet.xo.view.ConsoleView;
 
 public class XOCLI {
 
-    public static void main(String[] args) throws InvalidPointException {
+    public static void main(String[] args) throws InvalidPointException, AlreadyOccupiedException {
         final String name1 = "Vasya";
         final String name2 = "Robot";
 
@@ -22,8 +23,11 @@ public class XOCLI {
         Game game = new Game("Игра", field,  players);
 
         final ConsoleView consoleView = new ConsoleView();
-
         consoleView.show(game);
+        while (consoleView.move(game)) {
+            consoleView.show(game);
+        }
+
     }
 
 
