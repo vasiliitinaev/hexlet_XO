@@ -17,13 +17,14 @@ public class CurrentMoveController {
 
         for (int i = 0; i < field.getSize(); i++) {
             for (int j = 0; j < field.getSize(); j++) {
-                count++;
                 Point point = new Point(i, j);
                 if (field.getFigure(point) == Figure.X) {
-                    countX++;                    
+                    countX++;
+                    count++;
                 } else {
                     if (field.getFigure(point) == Figure.O) {
                         countY++;
+                        count++;
                     }
                 }
             }
