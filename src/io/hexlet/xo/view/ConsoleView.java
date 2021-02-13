@@ -6,6 +6,7 @@ import io.hexlet.xo.controllers.WinnerController;
 import io.hexlet.xo.model.Field;
 import io.hexlet.xo.model.Figure;
 import io.hexlet.xo.model.Game;
+import io.hexlet.xo.model.exceptions.AlreadyOccupiedException;
 import io.hexlet.xo.model.exceptions.InvalidPointException;
 
 import java.awt.*;
@@ -17,51 +18,71 @@ public class ConsoleView {
     private final WinnerController winnerController = new WinnerController();
     private final MoveController moveController = new MoveController();
     private static final String SEPARATOR = "~~~~~~~~~~~\n";
-    private final StringBuilder fieldBuilder = new StringBuilder();
+
 
 
     public void show(Game game) throws InvalidPointException {
 
+        final StringBuilder fieldBuilder = new StringBuilder();
         final Field field = game.getField();
         final int MAX_SIZE = field.getSize();
 
         for (int i = 0; i < MAX_SIZE; i++) {
             for (int j = 0; j < MAX_SIZE; j++) {
                 final Point point = new Point(i, j);
-                this.fieldBuilder.append(itemOutput(field, point));
+                fieldBuilder.append(itemOutput(field, point));
 
                 if (j < MAX_SIZE-1) {
-                    this.fieldBuilder.append("|");
+                    fieldBuilder.append("|");
                 }
             }
             if (i < MAX_SIZE-1) {
-                this.fieldBuilder.append(System.lineSeparator());
-                this.fieldBuilder.append(SEPARATOR);
+                fieldBuilder.append(System.lineSeparator());
+                fieldBuilder.append(SEPARATOR);
             }
         }
 
-        this.fieldBuilder.append(System.lineSeparator());
+        fieldBuilder.append(System.lineSeparator());
         System.out.println(fieldBuilder);
     }
 
-    public boolean move(final Game game) {
+    public boolean move(final Game game) throws InvalidPointException, AlreadyOccupiedException {
         final Field field = game.getField();
+        //final Figure currentFigure = currentMoveController.currentMove(field);
+        //if (currentFigure == null) {
+        //    final Figure winner = winnerController.getWinner(field);
+        //    if (winner == null) {
+        //        System.out.println("No winner and no move left!");
+        //        return false;
+        //    } else {
+        //        System.out.format("Winner is: %\n", winner);
+        //        return false;
+        //    }
+        //}
+
+        // Мой код
         final Figure currentFigure = currentMoveController.currentMove(field);
-        if (currentFigure == null) {
-            final Figure winner = winnerController.getWinner(field);
-            if (winner == null) {
-                System.out.println("No winner an dno move left!");
-                return false;
-            } else {
-                System.out.format("Winner is: %\n", winner);
-                return false;
-            }
+        final Figure winner = winnerController.getWinner(field);
+
+        if (currentFigure == null  &&  winner == null) {
+            System.out.println("No winner and no move left!");
+            return false;
         }
+
+        if (winner != null) {
+            System.out.format("Winner is: %s\n", winner.toString());
+            return false;
+        }
+
         System.out.format("Please enter move point for: %s\n", currentFigure);
         final Point point = askPoint();
-        moveController.applyFigure(field,
-                currentFigure,
-                point);
+        try {
+            moveController.applyFigure(field, currentFigure, point);
+        } catch (InvalidPointException | AlreadyOccupiedException e) {
+            System.out.println("Point is invalid!");
+        }
+
+        return true;
     }
 
     // Вывод содержимого клетки
@@ -84,7 +105,7 @@ public class ConsoleView {
     }
 
     private int askCoordinate(final String coordinateName) {
-        System.out.format("Please input %s", coordinateName);
+        System.out.format("Please input %s:", coordinateName, ": ");
         Scanner in = new Scanner(System.in);
         return in.nextInt();
     }
